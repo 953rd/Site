@@ -24,10 +24,7 @@ def registration(request):
         form = UserRegistrationForm(data=request.POST)
         if form.is_valid():
             form.save()
-            print('Hello')
             return HttpResponseRedirect(reverse('users:login'))
-        else:
-            print('Error!')
     else:
         form = UserRegistrationForm()
     context = {'form': form}
