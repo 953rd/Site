@@ -9,7 +9,7 @@ class UserLoginForm(AuthenticationForm):
         'placeholder': 'Введите имя пользователя'
     }))
     password = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': 'form-control py4',
+        'class': 'form-control py-4',
         'placeholder': 'Введите пароль'
     }))
     class Meta:
