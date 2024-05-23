@@ -1,6 +1,8 @@
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
-from users.models import User
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
+
+from users.models import User
+from users.tasks import send_email_verification
 
 
 class UserLoginForm(AuthenticationForm):
@@ -42,6 +44,13 @@ class UserRegistrationForm(UserCreationForm):
         'class': 'form-control py-4',
         'placeholder': 'Подтвердите пароль'
     }))
+
+    def save(self, commit=True):
+        user = super(UserRegistrationForm, self).save(commit=True)
+        send_email_verification.delay(user.id)
+
+        return user
+
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'username', 'email', 'password1', 'password2')
