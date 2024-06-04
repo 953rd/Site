@@ -13,14 +13,14 @@ from orders.forms import OrderForm
 
 class SuccessTemplateView(TitleMixin, TemplateView):
     template_name = 'orders/success.html'
-    title = 'Store - Спасибо за заказ!'
+    title = 'Алькир - Спасибо за заказ!'
 
 class CanceledTemplateView(TitleMixin, TemplateView):
     template_name = 'orders/canceled.html'
 
 
 class OrderCreateView(TitleMixin, CreateView):
-    title = 'Store - Оформление заказа'
+    title = 'Алькир - Оформление заказа'
     template_name = 'orders/order-create.html'
     form_class = OrderForm
     success_url = reverse_lazy('orders:order_create')

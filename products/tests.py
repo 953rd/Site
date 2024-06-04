@@ -44,5 +44,5 @@ class ProductsListViewTestCase(TestCase):
 
     def _common_tests(self, response):
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertEqual(response.context_data['title'], 'Store - Каталог')
+        self.assertEqual(response.context_data['title'], 'Алькир - Каталог')
         self.assertTemplateUsed(response, 'products/products.html')

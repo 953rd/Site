@@ -24,7 +24,7 @@ class UserRegistrationViewTestCase(TestCase):
         response = self.client.get(self.path)
 
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertEqual(response.context_data['title'], 'Store - Регистрация')
+        self.assertEqual(response.context_data['title'], 'Алькир - Регистрация')
         self.assertTemplateUsed(response, 'users/registration.html')
 
     def test_user_registration_post_success(self):

@@ -15,6 +15,7 @@
             <h1 class="my-4">Алькир</h1>
             <div class="list-group">
                 {% for category in categories %}
+                    <p>{{category}}</p>
                     <a href="{% url 'products:category' category.id %}" class="list-group-item">{{ category.name }}</a>
                 {% endfor %}
             </div>
@@ -114,7 +115,7 @@
 {% block footer %}
     <footer class="py-5 bg-dark">
     <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Store 2022</p>
+        <p class="m-0 text-center text-white">Copyright &copy; Алькир 2024</p>
     </div>
     <!-- /.container -->
 </footer>
