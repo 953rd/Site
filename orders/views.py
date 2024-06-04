@@ -10,6 +10,7 @@ from django.http import HttpResponseRedirect
 
 from common.views import TitleMixin
 from orders.forms import OrderForm
+from orders.models import Order
 
 
 class SuccessTemplateView(TitleMixin, TemplateView):
@@ -54,3 +55,16 @@ class OrderCreateView(TitleMixin, CreateView):
         form.instance.initiator = self.request.user
 
         return super(OrderCreateView, self).form_valid(form)
+
+
+class OrdersShowView(TitleMixin, TemplateView):
+    title = "Алькир - заказы"
+    template_name = 'orders/orders.html'
+    form_class = OrderForm
+    success_url = reverse_lazy('orders:orders')
+
+class OrderShowView(TitleMixin, TemplateView):
+    title = "Алькир - заказ"
+    template_name = 'orders/order.html'
+    form_class = Order
+    success_url = reverse_lazy('orders:order')
