@@ -11,9 +11,11 @@ from django.http import HttpResponseRedirect
 from common.views import TitleMixin
 from orders.forms import OrderForm
 
+
 class SuccessTemplateView(TitleMixin, TemplateView):
     template_name = 'orders/success.html'
     title = 'Алькир - Спасибо за заказ!'
+
 
 class CanceledTemplateView(TitleMixin, TemplateView):
     template_name = 'orders/canceled.html'
