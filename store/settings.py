@@ -17,8 +17,6 @@ env = environ.Env(
     DEBUG=(bool),
     SECRET_KEY=(str),
     DOMAIN_NAME=(str),
-    REDIS_HOST=(str),
-    REDIS_PORT=(str),
     DATABASE_NAME=(str),
     DATABASE_USER=(str),
     DATABASE_PASSWORD=(str),
@@ -109,25 +107,12 @@ INTERNAL_IPS = [
     '127.0.0.1'
 ]
 
-REDIS_HOST = env('REDIS_HOST')
-REDIS_PORT = env('REDIS_PORT')
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': f'redis://{REDIS_HOST}:{REDIS_PORT}/1',
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient'
-        }
-    }
-}
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.sqlite3',
         'NAME': env('DATABASE_NAME'),
         'USER': env('DATABASE_USER'),
         'PASSWORD': env('DATABASE_PASSWORD'),
@@ -204,6 +189,7 @@ else:
     EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
     EMAIL_USE_SSL = env('EMAIL_USE_SSL')
 
+
 # OAuth
 AUTHENCATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -219,10 +205,6 @@ SOCIALACCOUNT_PROVIDERS = {
         ]
     }
 }
-
-# Celery
-CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}'
-CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}'
 
 # Yookassa
 ACCOUNT_ID = '257765'
