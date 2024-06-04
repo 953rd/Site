@@ -9,7 +9,7 @@ from common.views import TitleMixin
 
 class IndexView(TitleMixin, TemplateView):
     template_name = 'products/index.html'
-    title = 'Store'
+    title = 'Алькир'
 
 
 class ProductsListView(TitleMixin, ListView):
