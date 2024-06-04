@@ -24,7 +24,7 @@
                         <td>{{ order.created }}</td>
                         <td>10000</td>
                         <td>
-                            <a href="{% url 'orders:order' order.id %}">просмотреть</a>
+                            <a href="{% url 'orders:order_detail' order.id %}">просмотреть</a>
                         </td>
                     </tr>
                     {% empty %}
