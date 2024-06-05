@@ -52,9 +52,10 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
     'django.contrib.sites',
-
+    'django.contrib.staticfiles',
+    'drf_yasg',
+    'drf_spectacular',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -189,7 +190,6 @@ else:
     EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
     EMAIL_USE_SSL = env('EMAIL_USE_SSL')
 
-
 # OAuth
 AUTHENCATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -209,3 +209,17 @@ SOCIALACCOUNT_PROVIDERS = {
 # Yookassa
 ACCOUNT_ID = '257765'
 SECRET_KEY = 'test_mBYTDG52aER3aUrJhunoGULbrznm1uj4LiRRBLb0EG4'
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Oliva-Med Swagger API',
+    'DESCRIPTION': 'Oliva-Med Swagger',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}

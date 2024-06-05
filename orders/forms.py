@@ -20,9 +20,11 @@ class OrderForm(forms.ModelForm):
             attrs={
                 'class': 'form-control', 
                 'placeholder': 'Россия, Москва, ул. Мира, дом 6'}))
+    basket_history = forms.JSONField()
+
             
     class Meta:
         model = Order
         fields = (
                 'first_name', 'last_name',
-                'email', 'address')
+                'email', 'address', 'basket_history')
