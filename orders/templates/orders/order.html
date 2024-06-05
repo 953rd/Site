@@ -30,7 +30,7 @@
                     {% endfor %}
                     </tbody>
                 </table>
-                <p class="float-right h4 mt-3">Итого: руб.</p>
+                <p class="float-right h4 mt-3">Итого: {{order.basket_history|get_total_sum|to_float_td}} руб.</p>
             </div>
         </div>
     </div>
