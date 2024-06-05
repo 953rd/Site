@@ -13,6 +13,7 @@ from django.views.generic.list import ListView
 from common.views import TitleMixin
 from orders.forms import OrderForm
 from orders.models import Order
+from django import template
 
 
 class SuccessTemplateView(TitleMixin, TemplateView):
@@ -88,3 +89,6 @@ class OrderShowView(TitleMixin, DetailView):
     model = Order
     context_object_name = 'order'
     success_url = reverse_lazy('orders:order_detail')
+
+
+
