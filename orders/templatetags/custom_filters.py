@@ -1,3 +1,5 @@
+import json
+
 from django import template
 
 register = template.Library()
@@ -29,4 +31,26 @@ def to_float(value):
 @register.filter
 def get_total_sum(basket_history):
     return sum(float(item['fields']['quantity']) * float(item['fields']['price']) for item in basket_history)
+
+
+@register.filter
+def jsonify_baskets(baskets):
+    baskets_list = []
+    for basket in baskets:
+        product = basket.product
+        basket_dict = {
+            "model": "products.product",
+            "pk": product.pk,
+            "fields": {
+                "name": product.name,
+                "description": product.description,
+                "price": str(product.price),
+                "quantity": product.quantity,
+                "image": product.image.url,
+                "category": product.category.pk
+            }
+        }
+        baskets_list.append(basket_dict)
+    return json.dumps(baskets_list)
+
 

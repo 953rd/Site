@@ -7,9 +7,14 @@ from django.views.generic.list import ListView
 from common.views import TitleMixin
 
 
-class IndexView(TitleMixin, TemplateView):
+class IndexView(TemplateView):
     template_name = 'products/index.html'
-    title = 'Алькир'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Алькир'
+        context['request'] = self.request
+        return context
+
 
 
 class ProductsListView(TitleMixin, ListView):

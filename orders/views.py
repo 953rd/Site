@@ -1,3 +1,4 @@
+import json
 import uuid
 
 from django.views.generic import DetailView
@@ -56,7 +57,7 @@ class OrderCreateView(TitleMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.initiator = self.request.user
-
+        form.instance.baskets = json.dumps(self.request.POST.getlist('basket_history'))
         return super(OrderCreateView, self).form_valid(form)
 
 
