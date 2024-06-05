@@ -9,7 +9,6 @@ def multiply(value, arg):
     return "{:.2f}".format(multiply_val).replace('.', ',')
 
 
-
 @register.filter
 def to_float_td(value):
     try:
@@ -26,4 +25,8 @@ def to_float(value):
     except ValueError:
         return ""
 
+
+@register.filter
+def get_total_sum(basket_history):
+    return sum(float(item['fields']['quantity']) * float(item['fields']['price']) for item in basket_history)
 

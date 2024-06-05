@@ -1,4 +1,5 @@
 {% extends 'products/base.html' %}
+{% load custom_filters %}
 
 {% block content %}
 <!-- Page Content -->
@@ -22,7 +23,7 @@
                         <th scope="row">{{order.id}}</th>
                         <td>{{ order.get_status_display }}</td>
                         <td>{{ order.created }}</td>
-                        <td>10000</td>
+                        <td>{{order.basket_history|get_total_sum|to_float_td}}</td>
                         <td>
                             <a href="{% url 'orders:order_detail' order.id %}">просмотреть</a>
                         </td>
