@@ -209,17 +209,3 @@ SOCIALACCOUNT_PROVIDERS = {
 # Yookassa
 ACCOUNT_ID = '257765'
 SECRET_KEY = 'test_mBYTDG52aER3aUrJhunoGULbrznm1uj4LiRRBLb0EG4'
-
-SPECTACULAR_SETTINGS = {
-    'TITLE': 'Oliva-Med Swagger API',
-    'DESCRIPTION': 'Oliva-Med Swagger',
-    'VERSION': '1.0.0',
-    'SERVE_INCLUDE_SCHEMA': False,
-}
-
-REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
-    ],
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-}
