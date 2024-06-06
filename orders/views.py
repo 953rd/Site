@@ -16,7 +16,9 @@ from orders.forms import OrderForm
 from orders.models import Order
 from django import template
 from datetime import datetime
-import pdb; 
+import pdb;
+
+from products.models import Basket
 
 
 class SuccessTemplateView(TitleMixin, TemplateView):
@@ -38,7 +40,7 @@ class OrderCreateView(TitleMixin, CreateView):
         form = self.get_form()
         if form.is_valid():
             self.form_valid(form)
-        
+
             Configuration.account_id = settings.ACCOUNT_ID
             Configuration.secret_key = settings.SECRET_KEY
 
@@ -46,16 +48,19 @@ class OrderCreateView(TitleMixin, CreateView):
             order_total = self.order.get_total_cost()  # Предположим, что у заказа есть метод для расчета общей стоимости
             payment = Payment.create({
                 'amount': {
-                'value': str(order_total),  # общая стоимость заказа
-                'currency': 'RUB'
+                    'value': str(order_total),  # общая стоимость заказа
+                    'currency': 'RUB'
                 },
                 'confirmation': {
                     'type': 'redirect',
                     'return_url': '{}{}'.format(settings.DOMAIN_NAME, reverse("orders:order_success"))
                 },
                 'capture': True,
-                'description': f'Заказ номер {self.order.id} от {datetime.now().strftime('%d/%m/%Y')}'  # Используем ID заказа
+                'description': f'Заказ номер {self.order.id} от {datetime.now().strftime('%d/%m/%Y')}'
+                # Используем ID заказа
             }, uuid.uuid4())
+            self.order.status = Order.PAID
+            self.order.save()
             return HttpResponseRedirect(payment.confirmation.confirmation_url, status=HTTPStatus.SEE_OTHER)
         else:
             return self.form_invalid(form)
@@ -80,10 +85,13 @@ class OrderCreateView(TitleMixin, CreateView):
             if not isinstance(item, dict):
                 raise ValueError("Each item in basket_history must be a dictionary")
 
+
         form.instance.baskets = json.dumps(baskets)  # Сериализация обратно в JSON строку
         response = super(OrderCreateView, self).form_valid(form)
+        Basket.objects.filter(user=self.request.user).delete()
         self.order = form.instance  # Сохраняем объект заказа
         return response
+
 
 class OrdersShowView(TitleMixin, ListView):
     model = Order
@@ -107,6 +115,3 @@ class OrderShowView(TitleMixin, DetailView):
     model = Order
     context_object_name = 'order'
     success_url = reverse_lazy('orders:order_detail')
-
-
-

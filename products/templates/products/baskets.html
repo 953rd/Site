@@ -19,9 +19,10 @@
             <div class="row text-center">
                 <div class="col-lg-4">
                     <input name="basketID" type="number" class="form-control quantity-input"
-                           data-basket-id="{{ basket.id }}" value="{{ basket.quantity }}" min="0">
+                           data-basket-id="{{ basket.id }}" value="{{ basket.quantity }}" min="1">
                 </div>
-                <div class="col-lg-4 basket-sum" data-basket-sum="{{ basket.id }}"><span class="basket-sum-value">{{ basket.sum|floatformat:2 }} руб.</span></div>
+                <div class="col-lg-4 basket-sum" data-basket-sum="{{ basket.id }}"><span class="basket-sum-value">{{ basket.sum|floatformat:2 }} руб.</span>
+                </div>
                 <div class="col-lg-4">
                     <a href="{% url 'products:basket_remove' basket.id %}">
                         <i class="fas fa-trash"></i>
@@ -38,9 +39,12 @@
         <h4 class="float-right total-sum">{{ baskets.total_sum }} руб.</h4>
     </div>
 </div>
-<a class="btn btn-success btn-lg float-right" href="{% url 'orders:order_create' %}">
+{% if baskets.total_sum > 0 %}
+<a class="btn btn-success btn-lg float-right order-button"  href="{% url 'orders:order_create' %}">
     Оформить заказ
 </a>
+{% endif %}
+
 {% else %}
 <h4 class="mt-3 mb-3 text-center">
     Корзина пуста
