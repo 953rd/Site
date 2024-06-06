@@ -93,18 +93,11 @@ class OrdersShowView(TitleMixin, ListView):
     success_url = reverse_lazy('orders:orders')
 
     def get_queryset(self):
-        queryset = super(OrdersShowView, self).get_queryset()
-        category_id = self.kwargs.get('order_id')
-
-        if category_id:
-            return queryset.filter(category_id=category_id)
-        else:
-            return queryset
+        user_id = self.request.user.id
+        return Order.objects.filter(initiator_id=user_id)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(OrdersShowView, self).get_context_data()
-        context['orders'] = Order.objects.all()
-
         return context
 
 
