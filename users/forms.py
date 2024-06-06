@@ -85,3 +85,15 @@ class UserProfileForm(UserChangeForm):
         model = User
         fields = ('first_name', 'last_name', 'image', 'username', 'email')
 
+
+class PasswordResetForm(forms.Form):
+    email = forms.EmailField(widget=forms.EmailInput(attrs={
+        'class': 'form-control py-4',
+        'placeholder': 'Введите адрес электронной почты'
+    }))
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if not get_user_model().objects.filter(email=email).exists():
+            raise forms.ValidationError('Пользователь с таким адресом электронной почты не существует.')
+        return email

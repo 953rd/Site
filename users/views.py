@@ -1,17 +1,21 @@
-from django.shortcuts import render, HttpResponseRedirect
-from django.contrib import auth, messages
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import HttpResponseRedirect
 from django.contrib.auth.views import LoginView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.base import TemplateView
 from django.urls import reverse, reverse_lazy
-
 from common.views import TitleMixin
-from products.models import Basket
-from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
+from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm, PasswordResetForm
 from users.models import User, EmailVerification
-
+from django.contrib.auth import get_user_model
+from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView, PasswordResetCompleteView
+from django.core.mail import send_mail
+from django.shortcuts import redirect
+from django.contrib import messages
+from django.views.generic import FormView
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.contrib.auth.tokens import default_token_generator
 
 class UserLoginView(TitleMixin, LoginView):
     template_name = 'users/login.html'
@@ -54,3 +58,45 @@ class EmailVerificationView(TitleMixin, TemplateView):
             return super(EmailVerificationView, self).get(request, *args, **kwargs)
         else:
             return HttpResponseRedirect(reverse('index')) 
+
+
+
+
+class UserPasswordResetView(PasswordResetView):
+    template_name = 'users/password_reset.html'
+    success_url = reverse_lazy('users:password_reset_done')
+
+
+class PasswordResetSendView(FormView):
+    form_class = PasswordResetForm
+    template_name = 'users/password_reset.html'
+
+    def form_valid(self, form):
+        email = form.cleaned_data.get('email')
+        user = get_user_model().objects.get(email=email)
+        uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+        token = default_token_generator.make_token(user)
+
+        # Отправка сообщения электронной почты с инструкциями по восстановлению пароля
+        subject = 'Восстановление пароля'
+        message = f'Здравствуйте, {user.get_full_name()}.\n\nВы запросили восстановление пароля для вашей учетной записи.\n\nДля восстановления пароля перейдите по следующей ссылке: http://localhost:8000/users/password_reset_confirm/{uidb64}/{token}/\n\nЕсли вы не запрашивали восстановление пароля, просто проигнорируйте это письмо.\n\nС уважением,\nАдминистрация сайта.'
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email='jatskov.i@yandex.ru',
+            recipient_list=['jatskov.i@yandex.ru'],
+        )
+
+        messages.success(self.request, 'Сообщение с инструкциями по восстановлению пароля отправлено на ваш адрес электронной почты.')
+        return redirect('users:login')
+
+
+class UserPasswordResetConfirmView(TitleMixin, PasswordResetConfirmView):
+    template_name = 'users/password_reset_confirm.html'
+    success_url = reverse_lazy('users:password_reset_complete')
+    title = 'Алькир - Подтверждение сброса пароля'
+
+
+class UserPasswordResetCompleteView(TitleMixin, PasswordResetCompleteView):
+    template_name = 'users/password_reset_complete.html'
+    title = 'Алькир - Пароль успешно сброшен'
