@@ -21,7 +21,7 @@
                     <input name="basketID" type="number" class="form-control quantity-input"
                            data-basket-id="{{ basket.id }}" value="{{ basket.quantity }}" min="0">
                 </div>
-                <div class="col-lg-4 basket-sum" data-basket-sum="{{ basket.id }}"><span class="basket-sum-value">{{ basket.sum }} руб.</span></div>
+                <div class="col-lg-4 basket-sum" data-basket-sum="{{ basket.id }}"><span class="basket-sum-value">{{ basket.sum|floatformat:2 }} руб.</span></div>
                 <div class="col-lg-4">
                     <a href="{% url 'products:basket_remove' basket.id %}">
                         <i class="fas fa-trash"></i>

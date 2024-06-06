@@ -74,7 +74,7 @@ def update_quantity(request, basket_id):
             baskets = Basket.objects.filter(user=request.user)
             total_sum = sum(basket.quantity * basket.product.price for basket in baskets)
             total_quantity = sum(basket.quantity for basket in baskets)
-            basket_sum = float(basket.product.price) * float(basket.quantity)
+            basket_sum = "{:.2f}".format(float(basket.product.price) * float(basket.quantity))
 
             # Возвращаем обновленные значения суммы и количества товаров в корзине
             return JsonResponse({'total_sum': total_sum, 'total_quantity': total_quantity, 'basket_sum': basket_sum})
