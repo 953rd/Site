@@ -18,7 +18,6 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 from django.views.decorators.cache import cache_page
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 
 from products.views import IndexView
 

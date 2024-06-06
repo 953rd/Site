@@ -45,7 +45,7 @@ def jsonify_baskets(baskets):
                 "name": product.name,
                 "description": product.description,
                 "price": str(product.price),
-                "quantity": product.quantity,
+                "quantity": basket.quantity,
                 "image": product.image.url,
                 "category": product.category.pk
             }
