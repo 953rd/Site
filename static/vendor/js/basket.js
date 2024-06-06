@@ -14,6 +14,9 @@ $(document).ready(function () {
                 // Обновим сумму и общее количество товаров в корзине
                 $('.total-sum').text(data.total_sum.replace('.', ',') + ' руб.');
                 $('.total-quantity').text(data.total_quantity);
+                var basketSum = $('.basket-sum[data-basket-sum=' + basketId + ']');
+                basketSum.find('.basket-sum-value').text(data.basket_sum.toString().replace('.', ',') + ' руб.');
+                console.log(data.basket_sum)
             },
             error: function (xhr, textStatus, errorThrown) {
                 console.log(xhr.responseText);
