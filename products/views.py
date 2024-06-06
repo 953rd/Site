@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponseRedirect
 from products.models import ProductCategory, Product, Basket
 from django.contrib.auth.decorators import login_required
-
+from django.http import JsonResponse
 from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
 from common.views import TitleMixin
@@ -59,3 +59,27 @@ def basket_remove(request, basket_id):
     basket = Basket.objects.get(id=basket_id)
     basket.delete()
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+@login_required
+def update_quantity(request, basket_id):
+    quantity = request.POST.get('quantity')
+
+    if basket_id and quantity:
+        try:
+            basket = Basket.objects.get(id=basket_id, user=request.user)
+            basket.quantity = quantity
+            basket.save()
+
+            # Обновляем сумму и общее количество товаров в корзине
+            baskets = Basket.objects.filter(user=request.user)
+            total_sum = sum(basket.quantity * basket.product.price for basket in baskets)
+            total_quantity = sum(basket.quantity for basket in baskets)
+
+            # Возвращаем обновленные значения суммы и количества товаров в корзине
+            return JsonResponse({'total_sum': total_sum, 'total_quantity': total_quantity})
+        except Basket.DoesNotExist:
+            pass
+
+    # Если в запросе нет баскет_id или quantity, возвращаем ошибку
+    return JsonResponse({'error': 'Invalid request'})
+
