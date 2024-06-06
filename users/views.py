@@ -83,7 +83,7 @@ class PasswordResetSendView(FormView):
         send_mail(
             subject=subject,
             message=message,
-            from_email='jatskov.i@yandex.ru',
+            from_email='lfdblxa123@yandex.ru',
             recipient_list=[email],
         )
 

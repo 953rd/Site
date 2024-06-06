@@ -5,15 +5,19 @@ from django.http import JsonResponse
 from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
 from common.views import TitleMixin
+from django.views.decorators.cache import never_cache
+from django.utils.decorators import method_decorator
 
-
+@method_decorator(never_cache, name='dispatch')
 class IndexView(TemplateView):
     template_name = 'products/index.html'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Алькир'
         context['request'] = self.request
         return context
+
 
 
 
@@ -32,11 +36,11 @@ class ProductsListView(TitleMixin, ListView):
         else:
             return queryset
 
-
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(ProductsListView, self).get_context_data()
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Алькир - Каталог'
+        context['request'] = self.request  # Добавляем переменную request в контекст
         context['categories'] = ProductCategory.objects.all()
-
         return context
 
 
@@ -74,7 +78,7 @@ def update_quantity(request, basket_id):
             baskets = Basket.objects.filter(user=request.user)
             total_sum = sum(basket.quantity * basket.product.price for basket in baskets)
             total_quantity = sum(basket.quantity for basket in baskets)
-            basket_sum = float(basket.product.price) * float(basket.quantity)
+            basket_sum = "{:.2f}".format(float(basket.product.price) * float(basket.quantity))
 
             # Возвращаем обновленные значения суммы и количества товаров в корзине
             return JsonResponse({'total_sum': total_sum, 'total_quantity': total_quantity, 'basket_sum': basket_sum})

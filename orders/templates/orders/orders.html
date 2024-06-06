@@ -18,9 +18,9 @@
                         <th scope="col">Действие</th>
                     </tr>
                     </thead>
-                    {% for order in orders %}
+                    {% for order in object_list  %}
                     <tr class="{% if order.status == 0 %} table-warning {% elif order.status == 1 %} table-primary {% elif order.status == 2 %} table-info {% else %} table-success {% endif %}">
-                        <th scope="row">{{order.id}}</th>
+                        <th scope="row">{{forloop.counter}}</th>
                         <td>{{ order.get_status_display }}</td>
                         <td>{{ order.created }}</td>
                         <td>{{order.basket_history|get_total_sum|to_float_td}}</td>
