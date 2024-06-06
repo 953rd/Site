@@ -84,7 +84,7 @@ class PasswordResetSendView(FormView):
             subject=subject,
             message=message,
             from_email='jatskov.i@yandex.ru',
-            recipient_list=['jatskov.i@yandex.ru'],
+            recipient_list=[email],
         )
 
         messages.success(self.request, 'Сообщение с инструкциями по восстановлению пароля отправлено на ваш адрес электронной почты.')
